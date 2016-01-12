@@ -247,13 +247,13 @@ Request.prototype.init = function (options) {
   // If a string URI/URL was given, parse it into a URL object
   if (typeof self.uri === 'string') {
     //from https://github.com/request/request/issues/1678
-    // Prevent double decoding
-    var tempUri = decodeURIComponent(self.uri);
+    var tempUri = self.uri;
     // Encode path if needed
-    var parts = url.parse(tempUri);
+    var parts = url.parse(self.uri);
     if (parts.pathname) {
         parts.pathname = parts.pathname.split('/').map(function (part) {
-            return encodeURIComponent(part);
+            // Prevent double encoding
+            return encodeURIComponent(decodeURIComponent(part));
         }).join('/');
         tempUri = url.format(parts);
     }
