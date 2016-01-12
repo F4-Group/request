@@ -249,7 +249,7 @@ Request.prototype.init = function (options) {
     //from https://github.com/request/request/issues/1678
     var tempUri = self.uri
     // Encode path if needed
-    var parts = url.parse(self.uri)
+    var parts = url.parse(tempUri)
     if (parts.pathname) {
       parts.pathname = parts.pathname.split('/').map(function (part) {
         // Prevent double encoding
