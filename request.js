@@ -253,7 +253,7 @@ Request.prototype.init = function (options) {
     if (parts.pathname) {
       parts.pathname = parts.pathname.split('/').map(function (part) {
         // Prevent double encoding
-        return encodeURIComponent(decodeURIComponent(part));
+        return encodeURIComponent(decodeURIComponent(part))
       }).join('/')
       tempUri = url.format(parts)
     }
