@@ -8,7 +8,7 @@ var server = require('./server')
 var s = server.createServer()
 
 tape('setup', function(t) {
-  s.listen(s.port, function() {
+  s.listen(0, function() {
     s.on('/', function (req, res) {
       res.writeHead(200, {'content-type': 'application/json'})
       res.end(JSON.stringify({
@@ -132,6 +132,17 @@ tape('del(string, function)', function(t) {
     headers: {foo: 'bar'},
     json: true
   }).del(s.url + '/', function (e, r, b) {
+    t.equal(b.method, 'DELETE')
+    t.equal(b.headers.foo, 'bar')
+    t.end()
+  })
+})
+
+tape('delete(string, function)', function(t) {
+  request.defaults({
+    headers: {foo: 'bar'},
+    json: true
+  }).delete(s.url + '/', function (e, r, b) {
     t.equal(b.method, 'DELETE')
     t.equal(b.headers.foo, 'bar')
     t.end()

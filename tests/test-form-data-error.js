@@ -7,7 +7,7 @@ var request = require('../index')
 var s = server.createServer()
 
 tape('setup', function(t) {
-  s.listen(s.port, function() {
+  s.listen(0, function() {
     t.end()
   })
 })
@@ -63,6 +63,20 @@ tape('omit content-length header if the value is set to NaN', function(t) {
   }).on('response', function(res) {
     sendStreamRequest(res)
   })
+})
+
+// TODO: remove this test after form-data@2.0 starts stringifying null values
+tape('form-data should throw on null value', function (t) {
+  t.throws(function () {
+    request({
+      method: 'POST',
+      url: s.url,
+      formData: {
+        key: null
+      }
+    })
+  }, TypeError)
+  t.end()
 })
 
 tape('cleanup', function(t) {

@@ -2,6 +2,7 @@
 
 var http = require('http')
   , https = require('https')
+  , destroyable = require('server-destroy')
   , server = require('./server')
   , request = require('../index')
   , tape = require('tape')
@@ -36,8 +37,11 @@ var faux_http = wrap_request('http', http)
   , plain_server = server.createServer()
   , https_server = server.createSSLServer()
 
+destroyable(plain_server)
+destroyable(https_server)
+
 tape('setup', function(t) {
-  plain_server.listen(plain_server.port, function() {
+  plain_server.listen(0, function() {
     plain_server.on('/plain', function (req, res) {
       res.writeHead(200)
       res.end('plain')
@@ -47,7 +51,7 @@ tape('setup', function(t) {
       res.end()
     })
 
-    https_server.listen(https_server.port, function() {
+    https_server.listen(0, function() {
       https_server.on('/https', function (req, res) {
         res.writeHead(200)
         res.end('https')
@@ -100,8 +104,8 @@ run_tests('https only', { 'https:': faux_https })
 run_tests('http and https', { 'http:': faux_http, 'https:': faux_https })
 
 tape('cleanup', function(t) {
-  plain_server.close(function() {
-    https_server.close(function() {
+  plain_server.destroy(function() {
+    https_server.destroy(function() {
       t.end()
     })
   })

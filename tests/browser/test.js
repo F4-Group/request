@@ -18,7 +18,7 @@ tape('returns on error', function(t) {
     uri: 'https://stupid.nonexistent.path:port123/\\<-great-idea',
     withCredentials: false
   }, function (error, response) {
-    t.equal(response.statusCode, 0)
+    t.equal(typeof error, 'object')
     t.end()
   })
 })
@@ -26,7 +26,7 @@ tape('returns on error', function(t) {
 tape('succeeds on valid URLs (with https and CORS)', function(t) {
   t.plan(1)
   request({
-    uri: 'https://localhost:6767',
+    uri: __karma__.config.requestTestUrl,
     withCredentials: false
   }, function (error, response) {
     t.equal(response.statusCode, 200)
